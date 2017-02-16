@@ -1,9 +1,13 @@
 package app
 
-import "github.com/revel/revel"
+import (
+    _ "github.com/lib/pq"
+    "github.com/revel/revel"
+)
 
 func init() {
 	// Filters is the default set of global filters.
+
 	revel.Filters = []revel.Filter{
 		revel.PanicFilter,             // Recover from panics and display an error page instead.
 		revel.RouterFilter,            // Use the routing table to select the right Action
