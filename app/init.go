@@ -1,13 +1,12 @@
 package app
 
 import (
-    _ "github.com/lib/pq"
     "github.com/revel/revel"
+    "myapp8/app/services"
 )
 
 func init() {
 	// Filters is the default set of global filters.
-
 	revel.Filters = []revel.Filter{
 		revel.PanicFilter,             // Recover from panics and display an error page instead.
 		revel.RouterFilter,            // Use the routing table to select the right Action
@@ -27,6 +26,12 @@ func init() {
 	// ( order dependent )
 	// revel.OnAppStart(InitDB)
 	// revel.OnAppStart(FillCache)
+
+       revel.OnAppStart(services.InitDB)
+       revel.InterceptMethod((*services.CommonService).Begin, revel.BEFORE)
+       revel.InterceptMethod((*services.CommonService).Commit, revel.AFTER)
+       revel.InterceptMethod((*services.CommonService).Rollback, revel.FINALLY)
+
 }
 
 // TODO turn this into revel.HeaderFilter

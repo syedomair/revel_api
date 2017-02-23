@@ -4,7 +4,17 @@
 
 module:testrunner
 
-GET     /                                       App.Index
+GET     /                                      App.Index
+GET     /books                                 BookController.List
+GET     /book/:book_id                         BookController.Get
+POST    /book                                  BookController.Create
+PATCH   /book/:book_id                         BookController.Update
+
+GET     /users                                 UserController.List
+GET     /user/:user_id                         UserController.Get
+POST    /user                                  UserController.Create
+PATCH   /user/:user_id                         UserController.Update
+
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
