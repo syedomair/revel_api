@@ -9,11 +9,14 @@ GET     /books                                 BookController.List
 GET     /book/:book_id                         BookController.Get
 POST    /book                                  BookController.Create
 PATCH   /book/:book_id                         BookController.Update
+GET     /public/books                          BookController.PublicBooks
+GET     /my-books/:user_id                     BookController.MyBooks
 
 GET     /users                                 UserController.List
 GET     /user/:user_id                         UserController.Get
 POST    /user                                  UserController.Create
 PATCH   /user/:user_id                         UserController.Update
+POST    /authenticate                          UserController.Authenticate
 
 
 # Ignore favicon requests

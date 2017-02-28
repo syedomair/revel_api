@@ -6,6 +6,9 @@ import (
     "encoding/json"
     "io"
     "fmt"
+    b64 "encoding/base64"
+    //"golang.org/x/crypto/scrypt"
+    //"github.com/revel/revel"
 )
 type UserService struct{
     CommonService
@@ -16,7 +19,7 @@ type UserResponse struct {
     Email           string `json:"email"`
     FirstName       string `json:"first_name"`
     LastName        string `json:"last_name"`
-} 
+}
 
 func (c UserService) List(offset string, limit string, orderby string, sort string) map[string]interface{} {
 
@@ -31,8 +34,7 @@ func (c UserService) List(offset string, limit string, orderby string, sort stri
         Scan(&userResponse)
 
     return c.successResponseList(userResponse, offset, limit, strconv.Itoa(count))
-}  
-
+}
 
 func (c UserService) Get(userId int64) map[string]interface{} {
 
@@ -43,7 +45,7 @@ func (c UserService) Get(userId int64) map[string]interface{} {
         Scan(&userResponse)
 
     return c.successResponse(userResponse)
-}  
+}
 
 
 func (c UserService) Create(jsonString io.Reader) map[string]interface{} {
@@ -80,16 +82,22 @@ func (c UserService) Create(jsonString io.Reader) map[string]interface{} {
         return c.errorResponse("password is a requird field")
     }
 
+    plainPassword, _ := b64.StdEncoding.DecodeString(user.Password)
+    //salt := revel.Config.StringDefault("server_salt", "")  
+    //encryptedPassword, _ := scrypt.Key([]byte(plainPassword), []byte(salt), 16384, 8, 1, 32)
+    user.Password = string(plainPassword)
+
+
     Db.NewRecord(user)
     Db.Create(&user)
 
     return c.successResponse(user.Id)
-}  
+}
 
 func (c UserService) Update(jsonString io.Reader, userId int64) map[string]interface{} {
     user := models.User{}
     inputUser := models.User{}
-    
+
     decodedJson := json.NewDecoder(jsonString)
     var jsonMap map[string]interface{}
 
@@ -113,4 +121,26 @@ func (c UserService) Update(jsonString io.Reader, userId int64) map[string]inter
     Db.Model(&user).Updates(&inputUser)
 
     return c.successResponse(userId)
-}  
+}
+
+func (c UserService) Authenticate(jsonString io.Reader) map[string]interface{} {
+
+    decodedJson := json.NewDecoder(jsonString)
+    var jsonMap map[string]interface{}
+
+    if err := decodedJson.Decode(&jsonMap); err != nil {
+        fmt.Println(err)
+    }
+    password, _ := b64.URLEncoding.DecodeString(jsonMap["password"].(string))
+
+    //salt := revel.Config.StringDefault("server_salt", "")  
+    //encryptedPassword, _ := scrypt.Key([]byte(password), []byte(salt), 16384, 8, 1, 32)
+
+    userResponse := UserResponse{}
+    Db.Table("public.user as u").
+        Select("*").
+        Where("email = ? AND password = ?", jsonMap["email"], password).
+        Scan(&userResponse)
+
+    return c.successResponse(userResponse)
+}

@@ -23,6 +23,7 @@ type BookResponse struct {
 
 func (c BookService) List(offset string, limit string, orderby string, sort string) map[string]interface{} {
 
+    orderby = "book."+ orderby
     count := 0 
     bookResponse :=[]BookResponse{}
     Db.Table("book").
@@ -32,6 +33,24 @@ func (c BookService) List(offset string, limit string, orderby string, sort stri
         Limit(limit).
         Offset(offset).
         Order(orderby +" "+ sort).
+        Scan(&bookResponse)
+
+    return c.successResponseList(bookResponse, offset, limit, strconv.Itoa(count))
+}  
+
+func (c BookService) MyBooks(userId int64, offset string, limit string, orderby string, sort string) map[string]interface{} {
+
+    orderby = "book."+ orderby
+    count := 0 
+    bookResponse :=[]BookResponse{}
+    Db.Table("book").
+        Select("*").
+        Joins("join public.user as u on book.user_id = u.id").
+        Count(&count).
+        Limit(limit).
+        Offset(offset).
+        Order(orderby +" "+ sort).
+        Where("book.user_id = ?", userId).
         Scan(&bookResponse)
 
     return c.successResponseList(bookResponse, offset, limit, strconv.Itoa(count))
@@ -107,7 +126,6 @@ func (c BookService) Update(jsonString io.Reader, bookId int64) map[string]inter
     if val, ok := jsonMap["publish"]; ok {
         inputBook.Publish = val.(bool)
     }
-
     Db.First(&book, bookId)
     Db.Model(&book).Updates(&inputBook)
 
