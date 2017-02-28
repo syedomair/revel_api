@@ -2,7 +2,7 @@ package controllers
 
 import (
     "github.com/revel/revel"
-    "myapp8/app/services"
+    "github.com/syedomair/revel_api/app/services"
 )
 
 type BookController struct {

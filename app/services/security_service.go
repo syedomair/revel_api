@@ -1,7 +1,7 @@
 package services
 
 import (
-    "myapp8/app/models"
+    "github.com/syedomair/revel_api/app/models"
     "github.com/dgrijalva/jwt-go"
     b64 "encoding/base64"
     "github.com/revel/revel"

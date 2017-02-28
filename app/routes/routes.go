@@ -4,11 +4,6 @@ package routes
 import "github.com/revel/revel"
 
 
-type tCommonController struct {}
-var CommonController tCommonController
-
-
-
 type tApp struct {}
 var App tApp
 
@@ -19,6 +14,11 @@ func (_ tApp) Index(
 	
 	return revel.MainRouter.Reverse("App.Index", args).Url
 }
+
+
+type tCommonController struct {}
+var CommonController tCommonController
+
 
 
 type tTestRunner struct {}
@@ -89,57 +89,6 @@ func (_ tStatic) ServeModule(
 }
 
 
-type tUserController struct {}
-var UserController tUserController
-
-
-func (_ tUserController) Init(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("UserController.Init", args).Url
-}
-
-func (_ tUserController) List(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("UserController.List", args).Url
-}
-
-func (_ tUserController) Get(
-		user_id int64,
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "user_id", user_id)
-	return revel.MainRouter.Reverse("UserController.Get", args).Url
-}
-
-func (_ tUserController) Create(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("UserController.Create", args).Url
-}
-
-func (_ tUserController) Update(
-		user_id int64,
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "user_id", user_id)
-	return revel.MainRouter.Reverse("UserController.Update", args).Url
-}
-
-func (_ tUserController) Authenticate(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("UserController.Authenticate", args).Url
-}
-
-
 type tBookController struct {}
 var BookController tBookController
 
@@ -197,6 +146,57 @@ func (_ tBookController) Update(
 	
 	revel.Unbind(args, "book_id", book_id)
 	return revel.MainRouter.Reverse("BookController.Update", args).Url
+}
+
+
+type tUserController struct {}
+var UserController tUserController
+
+
+func (_ tUserController) Init(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("UserController.Init", args).Url
+}
+
+func (_ tUserController) List(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("UserController.List", args).Url
+}
+
+func (_ tUserController) Get(
+		user_id int64,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "user_id", user_id)
+	return revel.MainRouter.Reverse("UserController.Get", args).Url
+}
+
+func (_ tUserController) Create(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("UserController.Create", args).Url
+}
+
+func (_ tUserController) Update(
+		user_id int64,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "user_id", user_id)
+	return revel.MainRouter.Reverse("UserController.Update", args).Url
+}
+
+func (_ tUserController) Authenticate(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("UserController.Authenticate", args).Url
 }
 
 

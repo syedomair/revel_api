@@ -2,8 +2,8 @@ package controllers
 
 import (
     "github.com/revel/revel"
-    "myapp8/app/models"
-    "myapp8/app/services"
+    "github.com/syedomair/revel_api/app/models"
+    "github.com/syedomair/revel_api/app/services"
     //"fmt"
 )
 

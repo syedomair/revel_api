@@ -2,7 +2,7 @@ package app
 
 import (
     "github.com/revel/revel"
-    "myapp8/app/services"
+    "github.com/syedomair/revel_api/app/services"
 )
 
 func init() {

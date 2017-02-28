@@ -1,7 +1,7 @@
 package services
 
 import (
-    "myapp8/app/models"
+    "github.com/syedomair/revel_api/app/models"
     "strconv"
     "encoding/json"
     "io"
