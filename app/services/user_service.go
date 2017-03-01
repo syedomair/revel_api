@@ -89,7 +89,8 @@ func (c UserService) Create(jsonString io.Reader) map[string]interface{} {
 
 
     Db.NewRecord(user)
-    Db.Create(&user)
+    Db.FirstOrCreate(&user, user)
+    fmt.Println(user.Id)
 
     return c.successResponse(user.Id)
 }
