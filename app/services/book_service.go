@@ -29,6 +29,7 @@ func (c BookService) List(offset string, limit string, orderby string, sort stri
     Db.Table("book").
         Select("*").
         Joins("join public.user as u on book.user_id = u.id").
+        Where("book.publish = ?", true).
         Count(&count).
         Limit(limit).
         Offset(offset).
