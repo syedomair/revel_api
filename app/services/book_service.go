@@ -126,8 +126,12 @@ func (c BookService) Update(jsonString io.Reader, bookId int64) map[string]inter
     if val, ok := jsonMap["publish"]; ok {
         inputBook.Publish = val.(bool)
     }
+
     Db.First(&book, bookId)
-    Db.Model(&book).Updates(&inputBook)
+    book.Name = inputBook.Name
+    book.Description = inputBook.Description
+    book.Publish = inputBook.Publish
+    Db.Save(&book)
 
     return c.successResponse(book.Id)
 }  
