@@ -113,6 +113,55 @@ func main() {
 			
 		})
 	
+	revel.RegisterController((*controllers.UserController)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Init",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "List",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "Get",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "user_id", Type: reflect.TypeOf((*int64)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "Create",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "Update",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "user_id", Type: reflect.TypeOf((*int64)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "Authenticate",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			
+		})
+	
 	revel.RegisterController((*controllers.BookController)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
@@ -163,55 +212,6 @@ func main() {
 				Name: "Update",
 				Args: []*revel.MethodArg{ 
 					&revel.MethodArg{Name: "book_id", Type: reflect.TypeOf((*int64)(nil)) },
-				},
-				RenderArgNames: map[int][]string{ 
-				},
-			},
-			
-		})
-	
-	revel.RegisterController((*controllers.UserController)(nil),
-		[]*revel.MethodType{
-			&revel.MethodType{
-				Name: "Init",
-				Args: []*revel.MethodArg{ 
-				},
-				RenderArgNames: map[int][]string{ 
-				},
-			},
-			&revel.MethodType{
-				Name: "List",
-				Args: []*revel.MethodArg{ 
-				},
-				RenderArgNames: map[int][]string{ 
-				},
-			},
-			&revel.MethodType{
-				Name: "Get",
-				Args: []*revel.MethodArg{ 
-					&revel.MethodArg{Name: "user_id", Type: reflect.TypeOf((*int64)(nil)) },
-				},
-				RenderArgNames: map[int][]string{ 
-				},
-			},
-			&revel.MethodType{
-				Name: "Create",
-				Args: []*revel.MethodArg{ 
-				},
-				RenderArgNames: map[int][]string{ 
-				},
-			},
-			&revel.MethodType{
-				Name: "Update",
-				Args: []*revel.MethodArg{ 
-					&revel.MethodArg{Name: "user_id", Type: reflect.TypeOf((*int64)(nil)) },
-				},
-				RenderArgNames: map[int][]string{ 
-				},
-			},
-			&revel.MethodType{
-				Name: "Authenticate",
-				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
 				},
