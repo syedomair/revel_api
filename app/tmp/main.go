@@ -29,6 +29,11 @@ func main() {
 	revel.Init(*runMode, *importPath, *srcPath)
 	revel.INFO.Println("Running revel server")
 	
+	revel.RegisterController((*controllers.CommonController)(nil),
+		[]*revel.MethodType{
+			
+		})
+	
 	revel.RegisterController((*controllers.App)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
@@ -40,11 +45,6 @@ func main() {
 					},
 				},
 			},
-			
-		})
-	
-	revel.RegisterController((*controllers.CommonController)(nil),
-		[]*revel.MethodType{
 			
 		})
 	

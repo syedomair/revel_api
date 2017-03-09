@@ -1,138 +1,139 @@
 package services
 
 import (
-    "github.com/syedomair/revel_api/app/models"
-    "strconv"
-    "encoding/json"
-    "io"
-    "fmt"
+	"encoding/json"
+	"fmt"
+	"github.com/syedomair/revel_api/app/models"
+	"io"
+	"strconv"
 )
-type BookService struct{
-    CommonService
+
+type BookService struct {
+	CommonService
 }
 
 type BookResponse struct {
-    Id              int64  `json:"id"`
-    UserId          int64  `json:"user_id"`
-    FirstName       string `json:"first_name"`
-    LastName        string `json:"last_name"`
-    Name            string  `json:"book_name" `
-    Description     string  `json:"description" `
-    Publish         bool  `json:"publish" `
-} 
+	Id          int64  `json:"id"`
+	UserId      int64  `json:"user_id"`
+	FirstName   string `json:"first_name"`
+	LastName    string `json:"last_name"`
+	Name        string `json:"book_name" `
+	Description string `json:"description" `
+	Publish     bool   `json:"publish" `
+}
 
 func (c BookService) List(offset string, limit string, orderby string, sort string) map[string]interface{} {
 
-    orderby = "book."+ orderby
-    count := 0 
-    bookResponse :=[]BookResponse{}
-    Db.Table("book").
-        Select("*").
-        Joins("join public.user as u on book.user_id = u.id").
-        Where("book.publish = ?", true).
-        Count(&count).
-        Limit(limit).
-        Offset(offset).
-        Order(orderby +" "+ sort).
-        Scan(&bookResponse)
+	orderby = "book." + orderby
+	count := 0
+	bookResponse := []BookResponse{}
+	Db.Table("book").
+		Select("*").
+		Joins("join public.user as u on book.user_id = u.id").
+		Where("book.publish = ?", true).
+		Count(&count).
+		Limit(limit).
+		Offset(offset).
+		Order(orderby + " " + sort).
+		Scan(&bookResponse)
 
-    return c.successResponseList(bookResponse, offset, limit, strconv.Itoa(count))
-}  
+	return c.successResponseList(bookResponse, offset, limit, strconv.Itoa(count))
+}
 
 func (c BookService) MyBooks(userId int64, offset string, limit string, orderby string, sort string) map[string]interface{} {
 
-    orderby = "book."+ orderby
-    count := 0 
-    bookResponse :=[]BookResponse{}
-    Db.Table("book").
-        Select("*").
-        Joins("join public.user as u on book.user_id = u.id").
-        Count(&count).
-        Limit(limit).
-        Offset(offset).
-        Order(orderby +" "+ sort).
-        Where("book.user_id = ?", userId).
-        Scan(&bookResponse)
+	orderby = "book." + orderby
+	count := 0
+	bookResponse := []BookResponse{}
+	Db.Table("book").
+		Select("*").
+		Joins("join public.user as u on book.user_id = u.id").
+		Count(&count).
+		Limit(limit).
+		Offset(offset).
+		Order(orderby+" "+sort).
+		Where("book.user_id = ?", userId).
+		Scan(&bookResponse)
 
-    return c.successResponseList(bookResponse, offset, limit, strconv.Itoa(count))
-}  
+	return c.successResponseList(bookResponse, offset, limit, strconv.Itoa(count))
+}
 
 func (c BookService) Get(bookId int64) map[string]interface{} {
 
-    bookResponse :=BookResponse{}
-    Db.Table("book").
-        Select("*").
-        Joins("join public.user as u on book.user_id = u.id").
-        Where("book.id = ?", bookId).
-        Scan(&bookResponse)
+	bookResponse := BookResponse{}
+	Db.Table("book").
+		Select("*").
+		Joins("join public.user as u on book.user_id = u.id").
+		Where("book.id = ?", bookId).
+		Scan(&bookResponse)
 
-    return c.successResponse(bookResponse)
-}  
+	return c.successResponse(bookResponse)
+}
 
 func (c BookService) Create(jsonString io.Reader) map[string]interface{} {
-    book := models.Book{}
+	book := models.Book{}
 
-    decodedJson := json.NewDecoder(jsonString)
-    var jsonMap map[string]interface{}
+	decodedJson := json.NewDecoder(jsonString)
+	var jsonMap map[string]interface{}
 
-    if err := decodedJson.Decode(&jsonMap); err != nil {
-        fmt.Println(err)
-    }
-    if val, ok := jsonMap["name"]; ok {
-        book.Name = val.(string)
-    }else{
-        return c.errorResponse("name is a requird field")
-    }
+	if err := decodedJson.Decode(&jsonMap); err != nil {
+		fmt.Println(err)
+	}
+	if val, ok := jsonMap["name"]; ok {
+		book.Name = val.(string)
+	} else {
+		return c.errorResponse("name is a requird field")
+	}
 
-    if val, ok := jsonMap["description"]; ok {
-        book.Description = val.(string)
-    }else{
-         return c.errorResponse("description is a requird field")
-    }
+	if val, ok := jsonMap["description"]; ok {
+		book.Description = val.(string)
+	} else {
+		return c.errorResponse("description is a requird field")
+	}
 
-    if val, ok := jsonMap["user_id"]; ok {
-        book.UserId = int64(val.(float64))
-    }else{
-        return c.errorResponse("user_id is a requird field")
-    }
+	if val, ok := jsonMap["user_id"]; ok {
+		book.UserId = int64(val.(float64))
+	} else {
+		return c.errorResponse("user_id is a requird field")
+	}
 
-    if val, ok := jsonMap["publish"]; ok {
-        book.Publish = val.(bool)
-    }
+	if val, ok := jsonMap["publish"]; ok {
+		book.Publish = val.(bool)
+	}
 
-    Db.NewRecord(book)
-    Db.Create(&book)
+	Db.NewRecord(book)
+	Db.Create(&book)
 
-    return c.successResponse(book.Id)
-}  
+	return c.successResponse(book.Id)
+}
 
 func (c BookService) Update(jsonString io.Reader, bookId int64) map[string]interface{} {
-    book := models.Book{}
-    inputBook := models.Book{}
-    
-    decodedJson := json.NewDecoder(jsonString)
-    var jsonMap map[string]interface{}
+	book := models.Book{}
+	inputBook := models.Book{}
 
-    if err := decodedJson.Decode(&jsonMap); err != nil {
-        fmt.Println(err)
-    }
-    if val, ok := jsonMap["name"]; ok {
-        inputBook.Name = val.(string)
-    }
+	decodedJson := json.NewDecoder(jsonString)
+	var jsonMap map[string]interface{}
 
-    if val, ok := jsonMap["description"]; ok {
-        inputBook.Description = val.(string)
-    }
+	if err := decodedJson.Decode(&jsonMap); err != nil {
+		fmt.Println(err)
+	}
+	if val, ok := jsonMap["name"]; ok {
+		inputBook.Name = val.(string)
+	}
 
-    if val, ok := jsonMap["publish"]; ok {
-        inputBook.Publish = val.(bool)
-    }
+	if val, ok := jsonMap["description"]; ok {
+		inputBook.Description = val.(string)
+	}
 
-    Db.First(&book, bookId)
-    book.Name = inputBook.Name
-    book.Description = inputBook.Description
-    book.Publish = inputBook.Publish
-    Db.Save(&book)
+	if val, ok := jsonMap["publish"]; ok {
+		inputBook.Publish = val.(bool)
+	}
 
-    return c.successResponse(book.Id)
-}  
+	Db.First(&book, bookId)
+	book.Name = inputBook.Name
+	book.Description = inputBook.Description
+	book.Publish = inputBook.Publish
+	Db.Save(&book)
+
+	return c.successResponse(book.Id)
+}

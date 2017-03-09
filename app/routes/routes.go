@@ -4,6 +4,11 @@ package routes
 import "github.com/revel/revel"
 
 
+type tCommonController struct {}
+var CommonController tCommonController
+
+
+
 type tApp struct {}
 var App tApp
 
@@ -14,11 +19,6 @@ func (_ tApp) Index(
 	
 	return revel.MainRouter.Reverse("App.Index", args).Url
 }
-
-
-type tCommonController struct {}
-var CommonController tCommonController
-
 
 
 type tStatic struct {}

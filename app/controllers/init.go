@@ -5,6 +5,6 @@ import (
 )
 
 func init() {
-    revel.InterceptMethod(BookController.Init, revel.BEFORE)
-    revel.InterceptMethod(UserController.Init, revel.BEFORE)
+	revel.InterceptMethod(BookController.Init, revel.BEFORE)
+	revel.InterceptMethod(UserController.Init, revel.BEFORE)
 }
