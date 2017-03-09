@@ -2,7 +2,6 @@ package app
 
 import (
 	"github.com/revel/revel"
-	"github.com/syedomair/revel_api/app/services"
 )
 
 func init() {
@@ -26,11 +25,6 @@ func init() {
 	// ( order dependent )
 	// revel.OnAppStart(InitDB)
 	// revel.OnAppStart(FillCache)
-
-	revel.OnAppStart(services.InitDB)
-	revel.InterceptMethod((*services.CommonService).Begin, revel.BEFORE)
-	revel.InterceptMethod((*services.CommonService).Commit, revel.AFTER)
-	revel.InterceptMethod((*services.CommonService).Rollback, revel.FINALLY)
 
 }
 

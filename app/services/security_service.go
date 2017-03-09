@@ -6,7 +6,6 @@ import (
 	"github.com/revel/revel"
 	"github.com/syedomair/revel_api/app/models"
 	"strings"
-	//"golang.org/x/crypto/scrypt"
 )
 
 type SecurityService struct {
@@ -62,8 +61,6 @@ func (c SecurityService) AuthProvider(request *revel.Request) map[string]interfa
 			password, _ := b64.URLEncoding.DecodeString(tokenClaims.Password)
 			plainPassword := string(password)
 
-			//salt := revel.Config.StringDefault("server_salt", "")
-			//encryptedPassword, _ := scrypt.Key([]byte(plainPassword), []byte(salt), 16384, 8, 1, 32)
 			Db.Where("email = ? AND password = ?", tokenClaims.Username, string(plainPassword)).Find(&user)
 
 			if user.FirstName == "" {

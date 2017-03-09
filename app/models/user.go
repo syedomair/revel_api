@@ -8,7 +8,10 @@ type User struct {
 	FirstName string    `json:"first_name" gorm:"column:first_name"`
 	LastName  string    `json:"last_name" gorm:"column:last_name"`
 	Password  string    `json:"password" gorm:"column:password"`
-	Salt      string    `json:"salt" gorm:"column:salt"`
 	CreatedAt time.Time `json:"created_at" gorm:"column:created_at"`
 	UpdatedAt time.Time `json:"updated_at" gorm:"column:updated_at"`
+}
+
+func (User) TableName() string {
+	return "user"
 }

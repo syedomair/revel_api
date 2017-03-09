@@ -7,8 +7,6 @@ import (
 	"github.com/syedomair/revel_api/app/models"
 	"io"
 	"strconv"
-	//"golang.org/x/crypto/scrypt"
-	//"github.com/revel/revel"
 )
 
 type UserService struct {
@@ -83,8 +81,6 @@ func (c UserService) Create(jsonString io.Reader) map[string]interface{} {
 	}
 
 	plainPassword, _ := b64.StdEncoding.DecodeString(user.Password)
-	//salt := revel.Config.StringDefault("server_salt", "")
-	//encryptedPassword, _ := scrypt.Key([]byte(plainPassword), []byte(salt), 16384, 8, 1, 32)
 	user.Password = string(plainPassword)
 
 	Db.NewRecord(user)
@@ -132,9 +128,6 @@ func (c UserService) Authenticate(jsonString io.Reader) map[string]interface{} {
 		fmt.Println(err)
 	}
 	password, _ := b64.URLEncoding.DecodeString(jsonMap["password"].(string))
-
-	//salt := revel.Config.StringDefault("server_salt", "")
-	//encryptedPassword, _ := scrypt.Key([]byte(password), []byte(salt), 16384, 8, 1, 32)
 
 	userResponse := UserResponse{}
 	Db.Table("public.user as u").
