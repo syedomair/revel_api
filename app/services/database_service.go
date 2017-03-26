@@ -30,9 +30,6 @@ func InitDB() {
 	Db.SetLogger(gorm.Logger{revel.INFO})
 
 	//The following lines are needed when Heroku drops all the tables periodically.
-	if !Db.HasTable(&models.Book{}) {
-		Db.CreateTable(&models.Book{})
-	}
 	if !Db.HasTable(&models.Client{}) {
 		Db.CreateTable(&models.Client{})
 		client := models.Client{Name: "Test",
@@ -44,6 +41,21 @@ func InitDB() {
 	}
 	if !Db.HasTable(&models.User{}) {
 		Db.CreateTable(&models.User{})
+		user := models.User{FirstName: "John",
+			LastName: "Smith",
+			Email:    "john@gmail.com",
+			Password: "123"}
+		Db.NewRecord(user)
+		Db.Create(&user)
+	}
+	if !Db.HasTable(&models.Book{}) {
+		Db.CreateTable(&models.Book{})
+		book := models.Book{UserId: 1,
+			Name:        "Test Book",
+			Description: "Test Book Description",
+			Publish:     true}
+		Db.NewRecord(book)
+		Db.Create(&book)
 	}
 }
 
